@@ -1,5 +1,6 @@
 package bignerd.jac.android.geoquiz;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +20,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private Button mTrueButton;
     private Button mFalseButton;
+    private Button mCheatButton;
     private ImageButton mBackButton;
     private ImageButton mNextButtton;
     private TextView mQuestionTextView;
@@ -42,6 +44,7 @@ public class QuizActivity extends AppCompatActivity {
 
         mTrueButton = (Button)findViewById(R.id.true_button);
         mFalseButton = (Button)findViewById(R.id.false_button);
+        mCheatButton = (Button)findViewById(R.id.cheat_button);
         mBackButton = (ImageButton)findViewById(R.id.back_button);
         mNextButtton = (ImageButton)findViewById(R.id.next_button);
 
@@ -78,6 +81,15 @@ public class QuizActivity extends AppCompatActivity {
             public void onClick(View view) {
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 updateQuestion();
+            }
+        });
+
+        mCheatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Start CheatActivity
+                Intent intent = new Intent(QuizActivity.this, CheatActivity.class);
+                startActivity(intent);
             }
         });
 
