@@ -19,6 +19,7 @@ public class CheatActivity extends AppCompatActivity {
     private static final String EXTRA_ANSWER_SHOWN = "answer_shown";
 
     private boolean mAnswerIsTrue;
+    private boolean mIsAnswerShown;
 
     private TextView mAnswerTextView;
     private Button mShowAnswer;
@@ -43,22 +44,41 @@ public class CheatActivity extends AppCompatActivity {
         mAnswerTextView = (TextView)findViewById(R.id.answer_text_view);
         mShowAnswer = (Button)findViewById(R.id.show_answer_button);
 
+        if (savedInstanceState != null){
+            mIsAnswerShown = savedInstanceState.getBoolean(EXTRA_ANSWER_SHOWN, false);
+            if (mIsAnswerShown){
+                showAnswer(mIsAnswerShown);
+                setAnswerShownResult(mIsAnswerShown);
+            }
+        }
+
         mShowAnswer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mAnswerIsTrue){
-                    mAnswerTextView.setText("True");
-                } else{
-                    mAnswerTextView.setText("False");
-                }
+                showAnswer(mIsAnswerShown);
                 setAnswerShownResult(true);
             }
         });
     }
 
+    private void showAnswer(boolean isAnswerShown){
+        if (mAnswerIsTrue){
+            mAnswerTextView.setText("True");
+        } else{
+            mAnswerTextView.setText("False");
+        }
+    }
+
     private void setAnswerShownResult(boolean isAnswerShown){
+        this.mIsAnswerShown =  isAnswerShown;
         Intent data = new Intent();
         data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
         setResult(RESULT_OK, data);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(EXTRA_ANSWER_SHOWN, mIsAnswerShown);
     }
 }
