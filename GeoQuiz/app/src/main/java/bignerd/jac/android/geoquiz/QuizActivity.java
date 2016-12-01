@@ -2,6 +2,7 @@ package bignerd.jac.android.geoquiz;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +27,8 @@ public class QuizActivity extends AppCompatActivity {
     private ImageButton mBackButton;
     private ImageButton mNextButtton;
     private TextView mQuestionTextView;
+
+    private TextView mApiLevelTextView;
 
     private boolean[] mCheatedOnQuestion;
 
@@ -58,6 +61,7 @@ public class QuizActivity extends AppCompatActivity {
         mNextButtton = (ImageButton)findViewById(R.id.next_button);
 
         mQuestionTextView = (TextView)findViewById(R.id.question_text_view);
+        mApiLevelTextView = (TextView)findViewById(R.id.api_level_text_view);
 
         mTrueButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +120,9 @@ public class QuizActivity extends AppCompatActivity {
             mCheatedOnQuestion[mCurrentIndex] = savedInstanceState.getBoolean(KEY_CHEATER, false);
         }
         updateQuestion();
+
+        // API level text
+        mApiLevelTextView.setText("API level " + Build.VERSION.SDK_INT);
     }
 
     @Override
