@@ -10,9 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by jorge.alcolea on 03/01/2017.
@@ -30,15 +30,27 @@ public class CrimeListFragment extends Fragment {
         mCrimeRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        updateUI();
-
         return view;
     }
 
-    private void updateUI() {
-        mAdapter = new CrimeAdapter(CrimeLab.get(getContext()).getCrimes());
-        mCrimeRecyclerView.setAdapter(mAdapter);
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
     }
+
+    private void updateUI() {
+        if (mAdapter == null){
+            mAdapter = new CrimeAdapter(CrimeLab.get(getContext()).getCrimes());
+            mCrimeRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.updateModifiedCrime();
+        }
+    }
+
+
+
+
 
     private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -64,13 +76,16 @@ public class CrimeListFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(getContext(), mCrime.getTitle() + " clicked", Toast.LENGTH_SHORT).show();
+            mAdapter.setLastAcceseedCrime(mCrime);
+            startActivity(CrimeActivity.newIntent(getContext(), mCrime.getId()));
         }
     }
 
     private class CrimeAdapter extends RecyclerView.Adapter<CrimeHolder>{
 
         private List<Crime> mCrimes;
+
+        private Crime mLastAcceseedCrime;
 
         public CrimeAdapter(List<Crime> crimes){
             mCrimes = crimes;
@@ -94,5 +109,23 @@ public class CrimeListFragment extends Fragment {
         public int getItemCount() {
             return mCrimes.size();
         }
+
+        public void setLastAcceseedCrime(Crime lastAcceseedCrime) {
+            mLastAcceseedCrime = lastAcceseedCrime;
+        }
+
+        public void updateModifiedCrime(){
+            if (mLastAcceseedCrime != null){
+                int position = mCrimes.indexOf(mLastAcceseedCrime);
+                if (position != -1){
+                    mAdapter.notifyItemChanged(position);
+                } else {
+                    mAdapter.notifyDataSetChanged();
+                }
+                setLastAcceseedCrime(null);
+            }
+        }
     }
+
+
 }

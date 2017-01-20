@@ -14,12 +14,15 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import java.text.SimpleDateFormat;
+import java.util.UUID;
 
 /**
  * Created by jorge.alcolea on 05/12/2016.
  */
 
 public class CrimeFragment extends Fragment {
+
+    private static final String ARG_CRIME_ID = "crime_id";
 
     private Crime mCrime;
 
@@ -31,7 +34,9 @@ public class CrimeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCrime = new Crime();
+
+        UUID crimeId = (UUID)getArguments().getSerializable(ARG_CRIME_ID);
+        mCrime = CrimeLab.get(getContext()).getCrime(crimeId);
     }
 
     @Nullable
@@ -43,6 +48,7 @@ public class CrimeFragment extends Fragment {
         mDateButton = (Button)v.findViewById(R.id.crime_date);
         mSolvedCheckBox = (CheckBox)v.findViewById(R.id.crime_solved);
 
+        updateUI();
 
         mTitleField.addTextChangedListener(new TextWatcher() {
             @Override
@@ -61,11 +67,6 @@ public class CrimeFragment extends Fragment {
             }
         });
 
-
-        SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yy hh:mm");
-        mDateButton.setText(sf.format(mCrime.getDate()));
-        mDateButton.setEnabled(false);
-
         mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
@@ -74,6 +75,25 @@ public class CrimeFragment extends Fragment {
         });
 
         return v;
+    }
+
+    public static CrimeFragment newInstance(UUID crimeId){
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ARG_CRIME_ID, crimeId);
+
+        CrimeFragment fragment = new CrimeFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
+    public void updateUI(){
+        mTitleField.setText(mCrime.getTitle());
+        mSolvedCheckBox.setChecked(mCrime.isSolved());
+
+        SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yy hh:mm");
+        mDateButton.setText(sf.format(mCrime.getDate()));
+        mDateButton.setEnabled(false);
     }
 
 
