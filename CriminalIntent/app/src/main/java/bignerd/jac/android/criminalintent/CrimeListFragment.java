@@ -12,7 +12,6 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by jorge.alcolea on 03/01/2017.
@@ -44,7 +43,9 @@ public class CrimeListFragment extends Fragment {
             mAdapter = new CrimeAdapter(CrimeLab.get(getContext()).getCrimes());
             mCrimeRecyclerView.setAdapter(mAdapter);
         } else {
-            mAdapter.updateModifiedCrime();
+            // Chapter 10 Challenge conflics with chapter 11
+            //mAdapter.updateModifiedCrime();
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -77,7 +78,7 @@ public class CrimeListFragment extends Fragment {
         @Override
         public void onClick(View view) {
             mAdapter.setLastAcceseedCrime(mCrime);
-            startActivity(CrimeActivity.newIntent(getContext(), mCrime.getId()));
+            startActivity(CrimePagerActivity.newIntent(getContext(), mCrime.getId()));
         }
     }
 
