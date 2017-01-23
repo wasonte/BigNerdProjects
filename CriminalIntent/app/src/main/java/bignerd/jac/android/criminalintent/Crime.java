@@ -1,5 +1,6 @@
 package bignerd.jac.android.criminalintent;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -45,5 +46,10 @@ public class Crime {
 
     public void setSolved(boolean solved) {
         mSolved = solved;
+    }
+
+    public String getFormatedDate(){
+        SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yy");
+        return sf.format(getDate());
     }
 }
