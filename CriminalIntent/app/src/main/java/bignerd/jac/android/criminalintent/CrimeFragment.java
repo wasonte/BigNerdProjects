@@ -143,7 +143,7 @@ public class CrimeFragment extends Fragment {
                mCrime.setDate(newDate, mCrime.getDate());
                updateDate();
            } else if (requestCode == REQUEST_TIME){
-               Date newTime = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+               Date newTime = (Date)data.getSerializableExtra(TimePickerFragment.EXTRA_DATE);
                mCrime.setDate(mCrime.getDate(), newTime);
                updateTime();
            }
