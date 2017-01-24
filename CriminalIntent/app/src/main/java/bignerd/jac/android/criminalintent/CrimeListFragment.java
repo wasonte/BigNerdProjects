@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 /**
@@ -115,6 +117,13 @@ public class CrimeListFragment extends Fragment {
             //mAdapter.updateModifiedCrime();
             mAdapter.notifyDataSetChanged();
         }
+
+        if (mAdapter.getItemCount() == 0){
+            mCrimeRecyclerView.setVisibility(View.GONE);
+        } else {
+            mCrimeRecyclerView.setVisibility(View.VISIBLE);
+        }
+
         updateSubtitle();
     }
 
