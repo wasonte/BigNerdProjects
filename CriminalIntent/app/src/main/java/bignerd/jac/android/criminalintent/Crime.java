@@ -1,6 +1,7 @@
 package bignerd.jac.android.criminalintent;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -32,24 +33,49 @@ public class Crime {
         mTitle = title;
     }
 
+    public boolean isSolved() {
+        return mSolved;
+    }
+
     public Date getDate() {
         return mDate;
     }
 
-    public void setDate(Date date) {
+    private void setDate(Date date) {
         mDate = date;
     }
 
-    public boolean isSolved() {
-        return mSolved;
+    public void setDate(Date date, Date time){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        calendar.setTime(time);
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+
+        setDate(calendar.getTime());
     }
 
     public void setSolved(boolean solved) {
         mSolved = solved;
     }
 
-    public String getFormatedDate(){
+    public String getFormattedDate(){
         SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yy");
+        return sf.format(getDate());
+    }
+
+    public String getFormattedTime(){
+        SimpleDateFormat sf = new SimpleDateFormat("HH:mm");
+        return sf.format(getDate());
+    }
+
+    public String getFormattedFullDate(){
+        SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yy HH:mm");
         return sf.format(getDate());
     }
 }
