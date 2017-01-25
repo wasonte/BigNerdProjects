@@ -109,22 +109,27 @@ public class CrimeListFragment extends Fragment {
     }
 
     private void updateUI() {
+        List<Crime> crimes = CrimeLab.get(getActivity()).getCrimes();
+
         if (mAdapter == null){
-            mAdapter = new CrimeAdapter(CrimeLab.get(getContext()).getCrimes());
+            mAdapter = new CrimeAdapter(crimes);
             mCrimeRecyclerView.setAdapter(mAdapter);
         } else {
             // Chapter 10 Challenge conflics with chapter 11
             //mAdapter.updateModifiedCrime();
+            mAdapter.setCrimes(crimes);
             mAdapter.notifyDataSetChanged();
         }
+        showEmptyMessageIfNeeded();
+        updateSubtitle();
+    }
 
+    private void showEmptyMessageIfNeeded(){
         if (mAdapter.getItemCount() == 0){
             mCrimeRecyclerView.setVisibility(View.GONE);
         } else {
             mCrimeRecyclerView.setVisibility(View.VISIBLE);
         }
-
-        updateSubtitle();
     }
 
     /**
@@ -173,6 +178,10 @@ public class CrimeListFragment extends Fragment {
         private Crime mLastAcceseedCrime;
 
         public CrimeAdapter(List<Crime> crimes){
+            mCrimes = crimes;
+        }
+
+        public void setCrimes(List<Crime> crimes) {
             mCrimes = crimes;
         }
 
